@@ -8,5 +8,5 @@ import cnovaez.dev.moviesbillboard.domain.models.Movie
  **/
 data class MoviesResponse(
     val items: List<Movie>,
-    val errorMessage: String
+    var errorMessage: String
 )

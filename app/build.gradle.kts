@@ -70,6 +70,12 @@ dependencies {
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
 
+    //Navigation
+    implementation("androidx.navigation:navigation-compose:2.7.4")
+
+    //extended icons
+    implementation("androidx.compose.material:material-icons-extended:1.5.4")
+
     //retrofit
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
@@ -85,5 +91,11 @@ dependencies {
 
     // Coil
     implementation("io.coil-kt:coil-compose:2.5.0")
+
+    //Datastore
+    implementation("androidx.datastore:datastore-preferences:1.0.0")
+
+    //For permissions
+    implementation("com.google.accompanist:accompanist-permissions:0.25.0")
 
 }

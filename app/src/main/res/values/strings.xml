@@ -1,4 +1,8 @@
 <resources>
     <string name="app_name">MoviesBillboard</string>
     <string name="description">movie pic</string>
+    <string name="actors">"Actors: "</string>
+    <string name="directors">"Directors: "</string>
+    <string name="genres">"Genres: "</string>
+    <string name="search">Search</string>
 </resources>

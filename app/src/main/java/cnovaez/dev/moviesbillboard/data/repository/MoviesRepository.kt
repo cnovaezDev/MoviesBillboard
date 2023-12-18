@@ -1,6 +1,7 @@
 package cnovaez.dev.moviesbillboard.data.repository
 
 import android.content.Context
+import android.util.Log
 import cnovaez.dev.moviesbillboard.data.network.MoviesApi
 import cnovaez.dev.moviesbillboard.domain.database.dao.DirectorsDao
 import cnovaez.dev.moviesbillboard.domain.database.dao.GenresDao
@@ -13,8 +14,8 @@ import cnovaez.dev.moviesbillboard.domain.database.entities.MovieDirectorCrossRe
 import cnovaez.dev.moviesbillboard.domain.database.entities.MovieGenreCrossRefEntity
 import cnovaez.dev.moviesbillboard.domain.database.entities.MovieStarCrossRefEntity
 import cnovaez.dev.moviesbillboard.domain.database.entities.MovieWithDetails
-import cnovaez.dev.moviesbillboard.domain.models.Movie
-import cnovaez.dev.moviesbillboard.utils.isDeviceIsConnectedToTheInternet
+import cnovaez.dev.moviesbillboard.domain.models.MovieDataResponse
+import cnovaez.dev.moviesbillboard.utils.ext.isDeviceIsConnectedToTheInternet
 import javax.inject.Inject
 
 /**
@@ -33,31 +34,29 @@ class MoviesRepository @Inject constructor(
     private val context: Context
 ) {
 
-    suspend fun getAllMovies(): List<MovieWithDetails> {
-        val movies = mutableListOf<MovieWithDetails>()
+    suspend fun getAllMovies(): MovieDataResponse? {
+        var response: MovieDataResponse? = null
         try {
-            val result = mutableListOf<Movie>()
             if (context.isDeviceIsConnectedToTheInternet()) {
-                result.addAll(getAllMoviesFromApi())
+                response = getAllMoviesFromApi()
             }
-            if (result.isNotEmpty()) {
-                movies.addAll(result.map { it.toMovieWithDetails() })
-            } else {
-                movies.addAll(getAllMoviesFromDb())
+            if (response == null || response.movies.isEmpty()) {
+                response = getAllMoviesFromDb()
             }
 
         } catch (e: Exception) {
             e.printStackTrace()
+            response = MovieDataResponse(emptyList(), e.message ?: "Error unknown")
         }
-        return movies
+        return response
     }
 
-   private suspend fun getAllMoviesFromApi(): List<Movie> {
-        val movies = mutableListOf<Movie>()
+    private suspend fun getAllMoviesFromApi(): MovieDataResponse? {
+        var response: MovieDataResponse? = null
         try {
-            val response = moviesApi.getMovies()
-            if (response.errorMessage.isEmpty()) {
-                movies.addAll(response.items)
+            val apiResponse = moviesApi.getMovies()
+            if (apiResponse.errorMessage.isEmpty() && apiResponse.items.isNotEmpty()) {
+                val movies = apiResponse.items
                 //TODO change texts to english: Insertar géneros, directores y estrellas
                 movies.flatMap { it.genreList }.distinctBy { it.key }.forEach { genre ->
                     genresDao.insertGenre(genre.toEntity())
@@ -93,23 +92,54 @@ class MoviesRepository @Inject constructor(
                         val movieStarCrossRef = MovieStarCrossRefEntity(movie.id, star.id)
                         movieStarCrossRefDao.insert(movieStarCrossRef)
                     }
+                    response = MovieDataResponse(movies.map { it.toMovieWithDetails() })
                 }
+            } else {
+                response = MovieDataResponse(emptyList(), apiResponse.errorMessage)
             }
 
         } catch (e: Exception) {
             e.printStackTrace()
+            response = MovieDataResponse(emptyList(), e.message ?: "Error unknown")
         }
-        return movies
+        return response
     }
 
-   private  suspend fun getAllMoviesFromDb(): List<MovieWithDetails> {
-        val movies = mutableListOf<MovieWithDetails>()
+    private suspend fun getAllMoviesFromDb(): MovieDataResponse? {
+        Log.i("Calling get all movies from db", "started")
+        var response: MovieDataResponse? = null
         try {
-            movies.addAll(moviesDao.getMovies())
+            response = MovieDataResponse(moviesDao.getMovies())
         } catch (e: Exception) {
             e.printStackTrace()
+            response = MovieDataResponse(emptyList(), e.message ?: "Error unknown")
         }
-        return movies
+        return response
+    }
+
+    suspend fun getAllMoviesFromDbFiltered(filter: String): MovieDataResponse? {
+        Log.i("Calling getAllMoviesFromDbFiltered", "started")
+        var response: MovieDataResponse? = null
+        try {
+            response =   if(filter.isNotEmpty()){
+                MovieDataResponse(moviesDao.getMovieByFilter(filter))
+            } else {
+                MovieDataResponse(moviesDao.getMovies())
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+            response = MovieDataResponse(emptyList(), e.message ?: "Error unknown")
+        }
+        return response
+    }
+
+    suspend fun getMovieById(movieId: String): MovieWithDetails? {
+        return try {
+            moviesDao.getMovieById(movieId)
+        } catch (e: Exception) {
+            e.printStackTrace()
+            null
+        }
     }
 
 

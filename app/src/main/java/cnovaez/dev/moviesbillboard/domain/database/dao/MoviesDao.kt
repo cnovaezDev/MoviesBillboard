@@ -21,4 +21,11 @@ interface MoviesDao {
 
     @Query("SELECT * FROM movies")
     suspend fun getMovies(): List<MovieWithDetails>
+
+    @Query("SELECT * FROM movies where id = :movieId")
+    suspend fun getMovieById(movieId: String): MovieWithDetails?
+
+    @Query("SELECT * FROM movies where title LIKE '%' || :filter || '%' OR releaseState LIKE '%' || :filter || '%' OR imDbRating LIKE '%' || :filter || '%'")
+    suspend fun getMovieByFilter(filter: String): List<MovieWithDetails>
+
 }
