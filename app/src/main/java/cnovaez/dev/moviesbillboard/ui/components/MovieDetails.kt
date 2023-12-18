@@ -28,6 +28,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -38,34 +39,41 @@ import androidx.compose.ui.window.Dialog
 import cnovaez.dev.moviesbillboard.R
 import cnovaez.dev.moviesbillboard.domain.database.entities.MovieWithDetails
 import cnovaez.dev.moviesbillboard.ui.MainActivity
+import cnovaez.dev.moviesbillboard.utils.constants.TestsConstants
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 
 /**
  ** Created by Carlos A. Novaez Guerrero on 17/12/2023 18:07
  ** cnovaez.dev@outlook.com
  **/
-@OptIn(ExperimentalPermissionsApi::class)
+
+/**
+ * Component used to show the details of a movie
+ */
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun MovieDetails(
     movie: MovieWithDetails,
     onDismiss: () -> Unit,
     onNavigateToDetailsPressed: () -> Unit,
-    activity: MainActivity
+    activity: MainActivity?
 ) {
-    PermissionScreen(
-        permissions = listOf(
-            Manifest.permission.ACCESS_FINE_LOCATION,
-            Manifest.permission.ACCESS_COARSE_LOCATION
-        ),
-        activity
-    )
+    if(activity!=null){
+        PermissionScreen(
+            permissions = listOf(
+                Manifest.permission.ACCESS_FINE_LOCATION,
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            ),
+            activity
+        )
+    }
     Dialog(onDismissRequest = { onDismiss() }) {
         Card(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(8.dp)
-                .clip(RoundedCornerShape(8.dp)) // Esquinas redondeadas
+                .clip(RoundedCornerShape(8.dp))
+                .testTag(TestsConstants.MOVIE_DETAILS)
         ) {
             Column {
                 IconButton(
@@ -104,10 +112,6 @@ fun MovieDetails(
                         text = movie.movie.plot,
                         modifier = Modifier.align(Alignment.Start)
                     )
-
-//                    if (movie.stars.isNotEmpty()) {
-//                        CustomList(stringResource(R.string.actors),movie.stars.map { it.name })
-//                    }
 
                     if (movie.genres.isNotEmpty()) {
                         CustomList(stringResource(R.string.genres), movie.genres.map { it.value })

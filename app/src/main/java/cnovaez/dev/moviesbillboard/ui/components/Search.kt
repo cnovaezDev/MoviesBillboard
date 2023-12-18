@@ -39,6 +39,9 @@ import java.util.TimerTask
 
 var timer: Timer = Timer()
 
+/**
+ * Search component used to search movies by a query
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun Search(onQueryChanged: (String) -> Unit, nightMode: Boolean, activity: MainActivity) {
@@ -81,7 +84,6 @@ fun Search(onQueryChanged: (String) -> Unit, nightMode: Boolean, activity: MainA
                         )
                     }
 
-                    //TextField sin el borde exterior
                     OutlinedTextField(
                         value = searchQuery,
                         onValueChange = {

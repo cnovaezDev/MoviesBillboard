@@ -8,23 +8,31 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Info
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.core.app.ActivityCompat.shouldShowRequestPermissionRationale
+import cnovaez.dev.moviesbillboard.R
 import cnovaez.dev.moviesbillboard.ui.MainActivity
 
 /**
@@ -32,6 +40,9 @@ import cnovaez.dev.moviesbillboard.ui.MainActivity
  ** cnovaez.dev@outlook.com
  **/
 
+/**
+ * Component used to request a single permission at the time to the user
+ */
 @Composable
 fun PermissionScreen(permission: String, activity: MainActivity) {
     var deniedPermissionDialogShown by remember { mutableStateOf(false) }
@@ -57,19 +68,21 @@ fun PermissionScreen(permission: String, activity: MainActivity) {
             },
             permanently = permanently,
             activity = activity,
-            {
+            onDismiss = {
                 deniedPermissionDialogShown = false
             }
         )
     }
 
 
-    // Para solicitar el permiso, llama al launcher
     LaunchedEffect(true) {
         launcher.launch(permission)
     }
 }
 
+/**
+ * Component used to request multiple permissions at the time to the user
+ */
 @Composable
 fun PermissionScreen(permissions: List<String>, activity: MainActivity) {
     var deniedPermissionDialogShown by remember { mutableStateOf(false) }
@@ -98,11 +111,11 @@ fun PermissionScreen(permissions: List<String>, activity: MainActivity) {
             activity = activity,
             {
                 deniedPermissionDialogShown = false
-            }
+            },
+            required = true
         )
     }
 
-    // Para solicitar los permisos, llama al launcher con la lista de permisos
     LaunchedEffect(true) {
         launcher.launch(permissions.toTypedArray())
     }
@@ -114,9 +127,10 @@ fun DeniedPermissionScreen(
     onRetryClicked: () -> Unit,
     permanently: Boolean,
     activity: MainActivity,
-    onDismiss: () -> Unit
+    onDismiss: () -> Unit,
+    required: Boolean = false
 ) {
-    Dialog(onDismissRequest = { }) {
+    Dialog(onDismissRequest = { if (!required) onDismiss() }) {
         Card(modifier = Modifier.fillMaxWidth()) {
             Column(
                 modifier = Modifier
@@ -125,10 +139,30 @@ fun DeniedPermissionScreen(
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
+
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Icon(
+                        imageVector = Icons.Filled.Info,
+                        contentDescription = "Permission type icon",
+                        modifier = Modifier.padding(start = 4.dp)
+                    )
+                    Text(
+                        text = if (!required) stringResource(R.string.permission_is_not_mandatory) else stringResource(
+                            R.string.permission_is_mandatory
+                        ),
+                        fontSize = 12.sp,
+                        modifier = Modifier.padding(start = 4.dp)
+                    )
+
+
+                }
                 Text(
                     text = "Permission $permission was denied",
                     textAlign = TextAlign.Center,
-                    modifier = Modifier.padding(bottom = 16.dp)
+                    modifier = Modifier.padding(vertical = 16.dp)
                 )
                 if (!permanently) {
                     Button(onClick = { onRetryClicked() }) {

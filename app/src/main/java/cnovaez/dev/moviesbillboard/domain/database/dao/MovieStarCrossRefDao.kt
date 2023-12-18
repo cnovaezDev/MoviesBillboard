@@ -15,6 +15,4 @@ interface MovieStarCrossRefDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(movieStarCrossRef: MovieStarCrossRefEntity)
 
-//    @Query("SELECT * FROM movie_stars WHERE movieId = :movieId")
-//    suspend fun getStarsForMovie(movieId: String): List<MovieStarCrossRefEntity>
 }

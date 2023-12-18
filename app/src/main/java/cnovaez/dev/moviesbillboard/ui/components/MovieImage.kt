@@ -27,6 +27,9 @@ import coil.request.ImageRequest
  ** cnovaez.dev@outlook.com
  **/
 
+/**
+ * Component used to show the load and image asynchronously and displayed in a rounded corner card
+ */
 @Composable
 fun MovieImage(url: String, height: Int = 200) {
     val imagePainter = rememberAsyncImagePainter(

@@ -23,7 +23,8 @@ import cnovaez.dev.moviesbillboard.domain.database.entities.StarEntity
  **/
 @Database(
     entities = [MovieEntity::class, GenreEntity::class, DirectorEntity::class, StarEntity::class, MovieGenreCrossRefEntity::class, MovieDirectorCrossRefEntity::class, MovieStarCrossRefEntity::class],
-    version = 1
+    version = 1,
+    exportSchema = false
 )
 abstract class MoviesDatabase : RoomDatabase() {
     abstract fun movieDao(): MoviesDao

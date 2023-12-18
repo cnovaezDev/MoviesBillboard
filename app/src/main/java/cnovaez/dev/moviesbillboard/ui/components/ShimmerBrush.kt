@@ -14,6 +14,10 @@ import androidx.compose.ui.graphics.Color
  ** Created by Carlos A. Novaez Guerrero on 17/12/2023 17:04
  ** cnovaez.dev@outlook.com
  **/
+
+/**
+ * Shimmer design, is the generic component used to build the loading animation
+ */
 @Composable
 fun ShimmerBrush(showShimmer: Boolean = true,targetValue:Float = 1000f): Brush {
     return if (showShimmer) {

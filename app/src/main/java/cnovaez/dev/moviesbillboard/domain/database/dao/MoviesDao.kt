@@ -4,6 +4,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.Transaction
 import cnovaez.dev.moviesbillboard.domain.database.entities.MovieEntity
 import cnovaez.dev.moviesbillboard.domain.database.entities.MovieWithDetails
 
@@ -16,15 +17,19 @@ interface MoviesDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertMovie(movie: MovieEntity)
 
+    @Transaction
     @Query("SELECT * FROM movies WHERE id = :movieId")
     suspend fun getMovie(movieId: String): MovieWithDetails
 
+    @Transaction
     @Query("SELECT * FROM movies")
     suspend fun getMovies(): List<MovieWithDetails>
 
+    @Transaction
     @Query("SELECT * FROM movies where id = :movieId")
     suspend fun getMovieById(movieId: String): MovieWithDetails?
 
+    @Transaction
     @Query("SELECT * FROM movies where title LIKE '%' || :filter || '%' OR releaseState LIKE '%' || :filter || '%' OR imDbRating LIKE '%' || :filter || '%'")
     suspend fun getMovieByFilter(filter: String): List<MovieWithDetails>
 

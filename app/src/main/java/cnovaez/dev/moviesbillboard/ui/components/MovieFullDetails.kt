@@ -55,6 +55,10 @@ import cnovaez.dev.moviesbillboard.utils.ext.toTimeFormat
  ** Created by Carlos A. Novaez Guerrero on 17/12/2023 18:07
  ** cnovaez.dev@outlook.com
  **/
+
+/**
+ * Component used to show the full details of a movie, including all the fields
+ */
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun MovieFullDetails(

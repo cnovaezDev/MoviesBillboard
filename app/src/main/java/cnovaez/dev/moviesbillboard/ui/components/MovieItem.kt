@@ -19,21 +19,28 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import cnovaez.dev.moviesbillboard.domain.database.entities.MovieWithDetails
+import cnovaez.dev.moviesbillboard.utils.constants.TestsConstants
 
 /**
  ** Created by Carlos A. Novaez Guerrero on 17/12/2023 17:08
  ** cnovaez.dev@outlook.com
  **/
 
+/**
+ * Component used to show the basic info of a movie to the user, including the title, release date and IMDb rating,
+ * for each movie a component of this type is created
+ */
 @Composable
 fun MovieItem(movie: MovieWithDetails, onClick: () -> Unit) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .padding(8.dp)
+            .testTag(TestsConstants.MOVIE_ITEM + movie.movie.id)
             .clickable { onClick() }
     ) {
         Box(modifier = Modifier.fillMaxWidth()) {

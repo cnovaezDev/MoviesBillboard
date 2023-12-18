@@ -29,6 +29,9 @@ import androidx.compose.ui.unit.sp
  ** cnovaez.dev@outlook.com
  **/
 
+/**
+ * Shimmer of the movie list, used to show a loading animation while the movies are being loaded
+ */
 @Composable
 fun ShimmerMovieList() {
     Box(modifier = Modifier.fillMaxSize()) {
@@ -72,7 +75,7 @@ private fun ShimmerImage() {
         modifier = Modifier
             .padding(8.dp)
             .size(200.dp)
-            .clip(RoundedCornerShape(8.dp)) // Clip las esquinas del Box
+            .clip(RoundedCornerShape(8.dp))
             .background(ShimmerBrush())
     )
 }

@@ -15,6 +15,4 @@ interface MovieDirectorCrossRefDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(movieDirectorCrossRef: MovieDirectorCrossRefEntity)
 
-//    @Query("SELECT * FROM movie_directors WHERE movieId = :movieId")
-//    suspend fun getDirectorsForMovie(movieId: String): List<MovieDirectorCrossRefEntity>
 }

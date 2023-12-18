@@ -1,8 +1,11 @@
 <resources>
-    <string name="app_name">MoviesBillboard</string>
+    <string name="app_name">Movies</string>
     <string name="description">movie pic</string>
     <string name="actors">"Actors: "</string>
     <string name="directors">"Directors: "</string>
     <string name="genres">"Genres: "</string>
     <string name="search">Search</string>
+    <string name="permission_is_not_mandatory_but_recommended">Permission is not mandatory, but recommended</string>
+    <string name="permission_is_mandatory">Permission is mandatory</string>
+    <string name="permission_is_not_mandatory">Permission is not mandatory</string>
 </resources>

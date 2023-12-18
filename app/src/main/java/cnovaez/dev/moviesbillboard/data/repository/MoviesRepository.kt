@@ -51,13 +51,13 @@ class MoviesRepository @Inject constructor(
         return response
     }
 
-    private suspend fun getAllMoviesFromApi(): MovieDataResponse? {
+    suspend fun getAllMoviesFromApi(): MovieDataResponse? {
         var response: MovieDataResponse? = null
         try {
             val apiResponse = moviesApi.getMovies()
             if (apiResponse.errorMessage.isEmpty() && apiResponse.items.isNotEmpty()) {
                 val movies = apiResponse.items
-                //TODO change texts to english: Insertar géneros, directores y estrellas
+
                 movies.flatMap { it.genreList }.distinctBy { it.key }.forEach { genre ->
                     genresDao.insertGenre(genre.toEntity())
                 }
@@ -105,8 +105,7 @@ class MoviesRepository @Inject constructor(
         return response
     }
 
-    private suspend fun getAllMoviesFromDb(): MovieDataResponse? {
-        Log.i("Calling get all movies from db", "started")
+    suspend fun getAllMoviesFromDb(): MovieDataResponse? {
         var response: MovieDataResponse? = null
         try {
             response = MovieDataResponse(moviesDao.getMovies())
@@ -118,7 +117,6 @@ class MoviesRepository @Inject constructor(
     }
 
     suspend fun getAllMoviesFromDbFiltered(filter: String): MovieDataResponse? {
-        Log.i("Calling getAllMoviesFromDbFiltered", "started")
         var response: MovieDataResponse? = null
         try {
             response =   if(filter.isNotEmpty()){
@@ -141,6 +139,8 @@ class MoviesRepository @Inject constructor(
             null
         }
     }
+
+
 
 
 }

@@ -95,7 +95,7 @@ fun String.formatDateComparable(): Long {
         return formatoNuevo.format(fechaDate).toLong()
     } catch (ex: Exception) {
         ex.printStackTrace()
-        0L // Puedes ajustar el valor predeterminado según tus necesidades
+        0L
     }
 }
 

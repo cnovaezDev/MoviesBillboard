@@ -40,7 +40,9 @@ import com.google.accompanist.permissions.ExperimentalPermissionsApi
  ** cnovaez.dev@outlook.com
  **/
 
-@OptIn(ExperimentalPermissionsApi::class)
+/**
+ * Main screen of the app, where the list of movies and other visual components are shown
+ */
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun MoviesScreen(
