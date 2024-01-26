@@ -66,7 +66,7 @@ fun MovieFullDetails(
     navHost: NavHostController
 ) {
     val movie by mainActivityViewModel.selectedMovie.observeAsState(initial = null)
-    val nightMode by mainActivityViewModel.loadMode(LocalContext.current)
+    val nightMode by mainActivityViewModel.loadMode()
         .collectAsState(initial = 0)
 
     if (movie != null) {

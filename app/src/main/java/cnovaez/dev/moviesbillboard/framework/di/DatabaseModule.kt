@@ -54,9 +54,6 @@ object DatabaseModule {
     fun provideMovieStarCrossRefDao(db: MoviesDatabase) = db.movieStarCrossRefDao()
 
 
-    @Singleton
-    @Provides
-    fun provideApplicationContext(@ApplicationContext context: Context) = context
 
 
 }

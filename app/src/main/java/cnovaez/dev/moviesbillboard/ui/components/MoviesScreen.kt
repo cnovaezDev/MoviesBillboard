@@ -50,8 +50,7 @@ fun MoviesScreen(
     navigationController: NavHostController,
     activity: MainActivity
 ) {
-    val context = LocalContext.current
-    val nightMode by viewModel.loadMode(context).collectAsState(initial = 0)
+    val nightMode by viewModel.loadMode().collectAsState(initial = 0)
     val showDetails = viewModel.showDetails.observeAsState(initial = false)
     val selectedMovie = viewModel.selectedMovie.observeAsState(initial = null)
     val movieUiState = viewModel.movies.value
@@ -105,7 +104,6 @@ fun MoviesScreen(
                             IconButton(
                                 onClick = {
                                     viewModel.saveMode(
-                                        context = context,
                                         if (nightMode == MODE_DARK) 0 else 1
                                     )
                                 },

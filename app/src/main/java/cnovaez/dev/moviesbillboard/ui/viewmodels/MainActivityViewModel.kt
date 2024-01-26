@@ -1,5 +1,6 @@
 package cnovaez.dev.moviesbillboard.ui.viewmodels
 
+import android.app.Application
 import android.content.Context
 import android.util.Log
 import androidx.compose.runtime.mutableStateOf
@@ -7,6 +8,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import cnovaez.dev.moviesbillboard.MoviesBillboardApp
 import cnovaez.dev.moviesbillboard.domain.database.entities.MovieWithDetails
 import cnovaez.dev.moviesbillboard.ui.MoviesUIState
 import cnovaez.dev.moviesbillboard.use_case.GetAllFilteredMoviesUseCase
@@ -29,6 +31,7 @@ import javax.inject.Inject
 class MainActivityViewModel @Inject constructor(
     private val getAllMoviesUseCase: GetAllMoviesUseCase,
     private val getAllFilteredMoviesUseCase: GetAllFilteredMoviesUseCase,
+    private val application: Application
 ) : ViewModel() {
 
     val movies = mutableStateOf<MoviesUIState>(MoviesUIState.Loading)
@@ -79,14 +82,14 @@ class MainActivityViewModel @Inject constructor(
     }
 
 
-    fun saveMode(context: Context, mode: Int) {
+    fun saveMode(mode: Int) {
         viewModelScope.launch {
-            context.saveMode(mode)
+            application.saveMode(mode)
         }
     }
 
-    fun loadMode(context: Context): Flow<Int> {
-        return context.loadMode()
+    fun loadMode(): Flow<Int> {
+        return application.loadMode()
     }
 
     fun filterMovies(it: String) {

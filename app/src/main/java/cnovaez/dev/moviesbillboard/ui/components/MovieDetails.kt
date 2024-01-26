@@ -143,7 +143,7 @@ fun CustomList(header: String, stars: List<String>) {
             modifier = Modifier.padding(horizontal = 4.dp)
         )
         Text(
-            text = stars.map { "${it}" }.toString().replace("[", "")
+            text = stars.map { it }.toString().replace("[", "")
                 .replace("]", ""),
             fontSize = 14.sp,
             textAlign = TextAlign.Start,
